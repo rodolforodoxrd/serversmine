@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Buscador de Servidores Minecraft</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Reset e base */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:'Roboto',sans-serif;
+    background: linear-gradient(135deg,#1e1e2f,#2a2a45);
+    color:#ffffff;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:40px 20px;
+}
+
+/* Container */
+.container{
+    width:100%;
+    max-width:600px;
+}
+
+/* Títulos */
+h1{
+    font-size:3rem;
+    margin-bottom:10px;
+    font-weight:700;
+    color:#ffffff;
+}
+h2.subtitulo{
+    font-size:1.2rem;
+    color:#c0c0c0;
+    margin-bottom:40px;
+}
+
+/* Input e botão estilizados */
+.input-group{
+    display:flex;
+    justify-content:center;
+    margin-bottom:30px;
+}
+
+input{
+    flex:1;
+    padding:16px;
+    border-radius:8px 0 0 8px;
+    border:none;
+    font-size:16px;
+    background:#2c2c3c;
+    color:#ffffff;
+}
+
+input:focus{
+    outline:none;
+    box-shadow:0 0 10px #4a90e2;
+}
+
+button{
+    padding:16px 25px;
+    border:none;
+    border-radius:0 8px 8px 0;
+    background:linear-gradient(45deg,#4a90e2,#357ABD);
+    color:#ffffff;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:700;
+    transition:0.3s;
+}
+
+button:hover{
+    background:linear-gradient(45deg,#357ABD,#4a90e2);
+    transform: translateY(-2px);
+}
+
+/* Cards de resultado */
+.card{
+    background:#2c2c3c;
+    border-radius:15px;
+    box-shadow:0 15px 50px rgba(0,0,0,0.6);
+    padding:30px;
+    margin-bottom:30px;
+    transition:transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover{
+    transform: scale(1.02);
+    box-shadow:0 20px 70px rgba(0,0,0,0.8);
+}
+
+.card img{
+    width:64px;
+    height:64px;
+    border-radius:12px;
+    margin-bottom:15px;
+}
+
+/* Informações do servidor */
+.info{
+    text-align:left;
+}
+
+.info p{
+    font-size:1rem;
+    margin:6px 0;
+}
+
+/* MOTD */
+.motd{
+    margin-top:15px;
+    font-weight:500;
+    white-space:pre-line;
+    line-height:1.3;
+}
+
+/* Cores e estilos Minecraft */
+.bold{font-weight:bold;}
+.italic{font-style:italic;}
+.reset{font-weight:normal;font-style:normal;color:#ffffff;}
+
+/* Mensagens de carregando e erro */
+#resultado p{
+    font-size:1.2rem;
+    color:#4a90e2;
+    margin-top:20px;
+}
+
+/* Responsividade */
+@media(max-width:600px){
+    input,button{font-size:14px;padding:12px;}
+    .card{padding:20px;}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Buscador de Servidores Minecraft</h1>
+    <h2 class="subtitulo">Rápido, confiável e moderno</h2>
+
+    <div class="input-group">
+        <input type="text" id="ip" placeholder="Digite o IP do servidor">
+        <button onclick="buscar()">Buscar</button>
+    </div>
+
+    <div id="resultado"></div>
+</div>
+
+<script>
+// Função de cores e estilos § do Minecraft
+function formatarMotd(texto){
+    const cores = {
+        "0":"#000000","1":"#0000AA","2":"#00AA00","3":"#00AAAA","4":"#AA0000",
+        "5":"#AA00AA","6":"#FFAA00","7":"#AAAAAA","8":"#555555","9":"#5555FF",
+        "a":"#55FF55","b":"#55FFFF","c":"#FF5555","d":"#FF55FF","e":"#FFFF55","f":"#FFFFFF"
+    };
+
+    let resultado = "";
+    let corAtual = "#FFFFFF";
+    let negrito = false;
+    let italico = false;
+
+    for(let i=0;i<texto.length;i++){
+        if(texto[i]==="§"){
+            let codigo = texto[i+1];
+            i++;
+            if(codigo in cores){ corAtual = cores[codigo]; }
+            else if(codigo === "l") { negrito = true; }
+            else if(codigo === "o") { italico = true; }
+            else if(codigo === "r") { corAtual="#FFFFFF"; negrito=false; italico=false; }
+        } else {
+            let classes = "";
+            if(negrito) classes+=" bold";
+            if(italico) classes+=" italic";
+            resultado += `<span class="${classes}" style="color:${corAtual}">${texto[i]}</span>`;
+        }
+    }
+    return resultado;
+}
+
+// Função principal de busca
+async function buscar(){
+    const ip = document.getElementById("ip").value.trim();
+    const resultadoDiv = document.getElementById("resultado");
+
+    if(!ip){
+        resultadoDiv.innerHTML = "<p>Por favor, insira o IP do servidor!</p>";
+        return;
+    }
+
+    resultadoDiv.innerHTML = "<p>Carregando informações do servidor...</p>";
+
+    try{
+        const res = await fetch(`https://api.mcsrvstat.us/2/${ip}?timeout=5`);
+        const data = await res.json();
+
+        if(!data.online){
+            resultadoDiv.innerHTML = "<p>Servidor Offline ou não encontrado.</p>";
+            return;
+        }
+
+        let motdRaw = data.motd.raw.join("\n");
+        let motdFormatado = formatarMotd(motdRaw);
+
+        resultadoDiv.innerHTML = `
+            <div class="card">
+                <img src="${data.icon || 'https://via.placeholder.com/64'}">
+                <h2>${data.hostname}</h2>
+                <div class="info">
+                    <p><b>IP:</b> ${data.ip}</p>
+                    <p><b>Versão:</b> ${data.version}</p>
+                    <p><b>Players:</b> ${data.players.online} / ${data.players.max}</p>
+                </div>
+                <div class="motd">${motdFormatado}</div>
+            </div>
+        `;
+    }catch(err){
+        resultadoDiv.innerHTML = "<p>Ocorreu um erro ao buscar o servidor.</p>";
+        console.error(err);
+    }
+}
+</script>
+
+</body>
+</html>
