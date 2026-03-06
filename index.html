@@ -1,233 +1,252 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="google-site-verification" content="FY6tHCcTACjNaRqOHLBXVfAcLCpj_gpQFL1yBZOnllg" />
-  <title>ServersMine - Buscador de Servidores Minecraft</title>
-  <meta name="description" content="Encontre servidores Minecraft confiáveis, veja players online, versão e MOTD em tempo real. Rápido, seguro e moderno.">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<style>
-/* Reset e base */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-    font-family:'Roboto',sans-serif;
-    background: linear-gradient(135deg,#1e1e2f,#2a2a45);
-    color:#ffffff;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:40px 20px;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldenAppleMC - Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #f1c40f; 
+            --bg-dark: #0f0f0f;
+            --bg-card: #1a1a1a;
+            --text-main: #ffffff;
+            --text-dim: #cccccc;
+            --accent-green: #2ecc71;
+            --mush-red: #ff4757;
+        }
 
-/* Container */
-.container{
-    width:100%;
-    max-width:600px;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-/* Títulos */
-h1{
-    font-size:3rem;
-    margin-bottom:10px;
-    font-weight:700;
-    color:#ffffff;
-}
-h2.subtitulo{
-    font-size:1.2rem;
-    color:#c0c0c0;
-    margin-bottom:40px;
-}
+        header {
+            width: 100%;
+            height: 60px;
+            background-color: var(--mush-red);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: 2px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
 
-/* Input e botão estilizados */
-.input-group{
-    display:flex;
-    justify-content:center;
-    margin-bottom:30px;
-}
+        .menu-icon { position: absolute; left: 20px; cursor: pointer; }
 
-input{
-    flex:1;
-    padding:16px;
-    border-radius:8px 0 0 8px;
-    border:none;
-    font-size:16px;
-    background:#2c2c3c;
-    color:#ffffff;
-}
+        .banner {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://wallpaperaccess.com/full/4657154.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-input:focus{
-    outline:none;
-    box-shadow:0 0 10px #4a90e2;
-}
+        .logo-box h1 {
+            font-size: clamp(30px, 8vw, 60px);
+            text-shadow: 4px 4px 15px rgba(0,0,0,1);
+            color: var(--primary);
+            margin: 0;
+            font-weight: 900;
+        }
 
-button{
-    padding:16px 25px;
-    border:none;
-    border-radius:0 8px 8px 0;
-    background:linear-gradient(45deg,#4a90e2,#357ABD);
-    color:#ffffff;
-    font-size:16px;
-    cursor:pointer;
-    font-weight:700;
-    transition:0.3s;
-}
+        /* Modos de Jogo */
+        .game-modes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 90%;
+            max-width: 1100px;
+            margin-top: -50px;
+        }
 
-button:hover{
-    background:linear-gradient(45deg,#357ABD,#4a90e2);
-    transform: translateY(-2px);
-}
+        .mode-card {
+            background: #252525;
+            border-bottom: 5px solid var(--primary);
+            border-radius: 12px;
+            padding: 30px 15px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
 
-/* Cards de resultado */
-.card{
-    background:#2c2c3c;
-    border-radius:15px;
-    box-shadow:0 15px 50px rgba(0,0,0,0.6);
-    padding:30px;
-    margin-bottom:30px;
-    transition:transform 0.3s, box-shadow 0.3s;
-}
+        .mode-card:hover { transform: translateY(-10px); background: #303030; }
+        .mode-card i { font-size: 35px; color: var(--primary); margin-bottom: 15px; display: block; }
 
-.card:hover{
-    transform: scale(1.02);
-    box-shadow:0 20px 70px rgba(0,0,0,0.8);
-}
+        /* Conteúdo Principal */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            width: 90%;
+            max-width: 1100px;
+            margin: 50px 0;
+        }
 
-.card img{
-    width:64px;
-    height:64px;
-    border-radius:12px;
-    margin-bottom:15px;
-}
+        .news-section {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 35px;
+            border-left: 4px solid var(--primary);
+        }
 
-/* Informações do servidor */
-.info{
-    text-align:left;
-}
+        .news-header h2 { margin: 0 0 10px 0; font-size: 22px; color: var(--primary); }
+        .news-header small { color: #888; display: block; margin-bottom: 20px; }
 
-.info p{
-    font-size:1rem;
-    margin:6px 0;
-}
+        .update-list { list-style: none; padding: 0; }
+        .update-list li { 
+            background: #222; 
+            margin-bottom: 10px; 
+            padding: 15px; 
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-green);
+        }
 
-/* MOTD */
-.motd{
-    margin-top:15px;
-    font-weight:500;
-    white-space:pre-line;
-    line-height:1.3;
-}
+        .side-column { display: flex; flex-direction: column; gap: 25px; }
 
-/* Cores e estilos Minecraft */
-.bold{font-weight:bold;}
-.italic{font-style:italic;}
-.reset{font-weight:normal;font-style:normal;color:#ffffff;}
+        .side-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
 
-/* Mensagens de carregando e erro */
-#resultado p{
-    font-size:1.2rem;
-    color:#4a90e2;
-    margin-top:20px;
-}
+        .ip-box {
+            background: var(--primary);
+            color: #000;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 900;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
 
-/* Responsividade */
-@media(max-width:600px){
-    input,button{font-size:14px;padding:12px;}
-    .card{padding:20px;}
-}
-</style>
+        .ip-box:hover { background: #fff; transform: scale(1.05); }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #5865F2; /* Cor oficial Discord */
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .social-btn:hover { background: #4752c4; transform: scale(1.05); }
+
+        .badge {
+            background: var(--mush-red);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 850px) {
+            .game-modes, .main-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Buscador de Servidores Minecraft</h1>
-    <h2 class="subtitulo">Rápido, confiável e moderno</h2>
+    <header>
+        <div class="menu-icon"><i class="fas fa-bars"></i></div>
+        GOLDENAPPLE
+    </header>
 
-    <div class="input-group">
-        <input type="text" id="ip" placeholder="Digite o IP do servidor">
-        <button onclick="buscar()">Buscar</button>
+    <div class="banner">
+        <div class="logo-box">
+            <h1>GOLDENAPPLE MC</h1>
+        </div>
     </div>
 
-    <div id="resultado"></div>
-</div>
+    <section class="game-modes">
+        <div class="mode-card">
+            <i class="fas fa-bed"></i>
+            <strong>BEDWARS</strong>
+            <div style="margin-top:10px; font-size: 12px; color: #888;">6 MAPAS DISPONÍVEIS</div>
+        </div>
+        <div class="mode-card">
+            <i class="fas fa-cloud"></i>
+            <strong>SKYWARS</strong>
+            <div style="margin-top:10px; font-size: 12px; color: #888;">6 MAPAS DISPONÍVEIS</div>
+        </div>
+        <div class="mode-card">
+            <i class="fas fa-fist-raised"></i>
+            <strong>SUMO</strong>
+            <div style="margin-top:10px; font-size: 12px; color: #888;">3 MAPAS DISPONÍVEIS</div>
+        </div>
+    </section>
 
-<script>
-// Função de cores e estilos § do Minecraft
-function formatarMotd(texto){
-    const cores = {
-        "0":"#000000","1":"#0000AA","2":"#00AA00","3":"#00AAAA","4":"#AA0000",
-        "5":"#AA00AA","6":"#FFAA00","7":"#AAAAAA","8":"#555555","9":"#5555FF",
-        "a":"#55FF55","b":"#55FFFF","c":"#FF5555","d":"#FF55FF","e":"#FFFF55","f":"#FFFFFF"
-    };
-
-    let resultado = "";
-    let corAtual = "#FFFFFF";
-    let negrito = false;
-    let italico = false;
-
-    for(let i=0;i<texto.length;i++){
-        if(texto[i]==="§"){
-            let codigo = texto[i+1];
-            i++;
-            if(codigo in cores){ corAtual = cores[codigo]; }
-            else if(codigo === "l") { negrito = true; }
-            else if(codigo === "o") { italico = true; }
-            else if(codigo === "r") { corAtual="#FFFFFF"; negrito=false; italico=false; }
-        } else {
-            let classes = "";
-            if(negrito) classes+=" bold";
-            if(italico) classes+=" italic";
-            resultado += `<span class="${classes}" style="color:${corAtual}">${texto[i]}</span>`;
-        }
-    }
-    return resultado;
-}
-
-// Função principal de busca
-async function buscar(){
-    const ip = document.getElementById("ip").value.trim();
-    const resultadoDiv = document.getElementById("resultado");
-
-    if(!ip){
-        resultadoDiv.innerHTML = "<p>Por favor, insira o IP do servidor!</p>";
-        return;
-    }
-
-    resultadoDiv.innerHTML = "<p>Carregando informações do servidor...</p>";
-
-    try{
-        const res = await fetch(`https://api.mcsrvstat.us/2/${ip}?timeout=5`);
-        const data = await res.json();
-
-        if(!data.online){
-            resultadoDiv.innerHTML = "<p>Servidor Offline ou não encontrado.</p>";
-            return;
-        }
-
-        let motdRaw = data.motd.raw.join("\n");
-        let motdFormatado = formatarMotd(motdRaw);
-
-        resultadoDiv.innerHTML = `
-            <div class="card">
-                <img src="${data.icon || 'https://via.placeholder.com/64'}">
-                <h2>${data.hostname}</h2>
-                <div class="info">
-                    <p><b>IP:</b> ${data.ip}</p>
-                    <p><b>Versão:</b> ${data.version}</p>
-                    <p><b>Players:</b> ${data.players.online} / ${data.players.max}</p>
-                </div>
-                <div class="motd">${motdFormatado}</div>
+    <main class="main-grid">
+        
+        <article class="news-section">
+            <div class="news-header">
+                <h2>PATCH NOTES 1.0.0 <span class="badge">NOVO</span></h2>
+                <small>Sistema atualizado para máxima performance</small>
             </div>
-        `;
-    }catch(err){
-        resultadoDiv.innerHTML = "<p>Ocorreu um erro ao buscar o servidor.</p>";
-        console.error(err);
-    }
-}
-</script>
+            
+            <ul class="update-list">
+                <li>🚀 <strong>Game Play Imbatível:</strong> Testada e aprovada para ser a mais fluida do mercado.</li>
+                <li>🇧🇷 <strong>Conexão:</strong> Servidor hospedado com <strong>Ping Brasileiro</strong> (Baixa Latência).</li>
+                <li>📊 <strong>Holographic Displays:</strong> 3 modos de displays holográficos exclusivos para stats e infos.</li>
+                <li>🗺️ <strong>Mapas:</strong> Adicionados 6 mapas no Bedwars/Skywars e 3 arenas de Sumo.</li>
+                <li>⚡ <strong>Potência:</strong> Servidor rodando com <strong>muitos gigas de RAM</strong> para zero lag.</li>
+            </ul>
+            
+            <p>Nossa equipe trabalhou pesado nesta versão 1.0.0. O servidor está otimizado para aguentar centenas de jogadores simultâneos mantendo o TPS cravado no 20. Entre e sinta a diferença!</p>
+        </article>
+
+        <aside class="side-column">
+            <div class="side-card">
+                <h3>JOGAR AGORA</h3>
+                <p>O melhor ping do Brasil!<br><strong>Venha para a GoldenApple!</strong></p>
+                <div class="ip-box" onclick="copyIP()">jogar.goldenapplemc.com.br</div>
+            </div>
+
+            <div class="side-card">
+                <h3>COMUNIDADE</h3>
+                <p>Entre no nosso servidor oficial para sorteios e suporte.</p>
+                <a href="#" class="social-btn">
+                    <i class="fab fa-discord"></i> ENTRAR NO DISCORD
+                </a>
+            </div>
+        </aside>
+
+    </main>
+
+    <script>
+        function copyIP() {
+            const ip = "jogar.goldenapplemc.com.br";
+            navigator.clipboard.writeText(ip);
+            alert("IP Copiado com sucesso! Divirta-se no GoldenAppleMC.");
+        }
+    </script>
 
 </body>
 </html>
-
-
-
