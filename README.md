@@ -12,7 +12,7 @@ This is the official site for **ServersMine - GoldenAppleMC**. Here you can find
 
 ## About
 
-ServersMine is dedicated to providing the best Minecraft multiplayer experience with custom features and a friendly community.
+ServersMine - GoldenAppleMC is dedicated to providing the best Minecraft multiplayer experience with custom features and a friendly community.
 
 ---
 
