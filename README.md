@@ -1,4 +1,4 @@
-# Welcome to ServersMine
+# Welcome to ServersMine - GoldenAppleMC
 
 Hello! 👋  
 
@@ -17,3 +17,5 @@ ServersMine is dedicated to providing the best Minecraft multiplayer experience 
 ---
 
 Thanks for visiting! 🚀
+
+And i am brazil guys
